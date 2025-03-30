@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product-service
+  template:
+     metadata:
+       labels:
+         app: product-service
+     spec:
+        containers:
+        - name: product-service
+          image: mahadevanprotech/product-service
+          resources:
+            requests:
+              cpu: "250m"      # Minimum CPU request (5 millicores)
+              memory: "256Mi" # Minimum memory request (16 MiB)
+            limits:
+              cpu: "500m"     # Restrict CPU usage to 50 millicores
+              memory: "512Mi" # Restrict memory usage to 64 MiB
+
+          ports:
+          - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: database-config
+            - secretRef:
+                name: database-secret
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: product-service
+spec:
+  selector:
+    app: product-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP

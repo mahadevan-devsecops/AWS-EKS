@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: order-service
+  template:
+     metadata:
+       labels:
+         app: order-service
+     spec:
+        containers:
+        - name: order-service
+          image: mahadevanprotech/order-service
+          ports:
+          - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: database-config
+            - secretRef:
+                name: database-secret
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+spec:
+  selector:
+    app: order-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP

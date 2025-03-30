@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+     metadata:
+       labels:
+         app: user-service
+     spec:
+        containers:
+        - name: user-service
+          image: mahadevanprotech/user-service
+          ports:
+          - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: database-config
+            - secretRef:
+                name: database-secret
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+spec:
+  selector:
+    app: user-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP

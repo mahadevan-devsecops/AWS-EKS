@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #2c3e50;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            color: #ecf0f1;
+        }
+
+        .container {
+            background-color: #34495e;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            width: 80%;
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #f39c11;
+            font-weight: 600;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            width: 30%;
+            transition: background-color 0.3s;
+        }
+
+        .add-order-btn {
+            background-color: #3498db;
+        }
+
+        .add-order-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .display-orders-btn {
+            background-color: #f39c11;
+            color: white;
+        }
+
+        .display-orders-btn:hover {
+            background-color: #e67e22;
+        }
+
+        .dashboard-btn {
+            background-color: #9b59b6;
+        }
+
+        .dashboard-btn:hover {
+            background-color: #8e44ad;
+        }
+
+        .form-container, .order-table-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .form-container form {
+            background-color: #34495e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: left;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-container label {
+            font-size: 1.1em;
+            color: #ecf0f1;
+            margin-top: 10px;
+            display: block;
+        }
+
+        .order-table-container {
+            background-color: #f39c11;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #95a5a6;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #16a085;
+            font-weight: 600;
+        }
+
+        td {
+            background-color: #34495e;
+        }
+    </style>
+    <script>
+        const apiBaseUrl = window.location.origin + '/orders';
+
+        async function fetchOrders() {
+            try {
+                const response = await fetch(`${apiBaseUrl}/orders`);
+                const orders = await response.json();
+                const orderList = document.getElementById('orderList');
+                orderList.innerHTML = '';
+                orders.forEach(order => {
+                    const row = `<tr>
+                        <td>${order.order_id}</td>
+                        <td>${order.product_name}</td>
+                        <td>${order.ordered_quantity}</td>
+                        <td>${order.ordered_by}</td>
+                        <td><button onclick="deleteOrder(${order.order_id})">Delete</button></td>
+                    </tr>`;
+                    orderList.innerHTML += row;
+                });
+            } catch (error) {
+                console.error('Error fetching orders:', error);
+            }
+        }
+
+        async function addOrder(event) {
+            event.preventDefault();
+            const product_id = document.getElementById('orderProduct').value;
+            const quantity = document.getElementById('orderQuantity').value;
+            const user_id = document.getElementById('orderUser').value;
+            
+            const response = await fetch(`${apiBaseUrl}/add_order`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ product_id, quantity, user_id })
+            });
+            const result = await response.json();
+            document.getElementById('addOrderMessage').textContent = result.message || result.error;
+            fetchOrders();
+        }
+
+        async function deleteOrder(order_id) {
+            await fetch(`${apiBaseUrl}/delete_order/${order_id}`, { method: 'DELETE' });
+            fetchOrders();
+        }
+    </script>
+</head>
+<body onload="fetchOrders()">
+    <div class="container">
+        <h2>Order Management</h2>
+        <div class="btn-group">
+            <button class="add-order-btn" onclick="toggleForm('addOrder')">Add New Order</button>
+            <button class="display-orders-btn" onclick="toggleForm('displayOrders')">Display Orders</button>
+            <button class="dashboard-btn" onclick="window.location.href='dashboard.html'">Dashboard</button>
+        </div>
+        <div class="form-container" id="addOrderFormContainer">
+            <h3>Add New Order</h3>
+            <form id="addOrderForm" onsubmit="addOrder(event)">
+                <label for="orderProduct">Product ID:</label>
+                <input type="number" id="orderProduct" required><br>
+                <label for="orderQuantity">Quantity:</label>
+                <input type="number" id="orderQuantity" required><br>
+                <label for="orderUser">User ID:</label>
+                <input type="number" id="orderUser" required><br>
+                <button type="submit">Add Order</button>
+            </form>
+            <div id="addOrderMessage" class="message"></div>
+        </div>
+        <div class="order-table-container" id="orderTableContainer">
+            <h3>Existing Orders</h3>
+            <table id="orderTable">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>User</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="orderList"></tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+
