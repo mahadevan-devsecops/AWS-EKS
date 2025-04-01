@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #343a40; /* Dark background color for the whole page */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            color: #FFD700; /* Yellow foreground color */
+        }
+
+        .container {
+            background-color: #495057; /* Slightly lighter dark background for container */
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 70%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #FFD700; /* Yellow text for the title */
+            margin-bottom: 30px;
+            font-size: 2em;
+            font-weight: 600;
+        }
+
+        nav {
+            width: 100%;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        nav ul li {
+            margin: 10px 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Teal background for "Manage Products" */
+        nav ul li a[href="products.html"] {
+            background-color: #1abc9c; /* Teal background */
+            color: white;
+        }
+
+        nav ul li a[href="products.html"]:hover {
+            background-color: #16a085; /* Darker teal on hover */
+        }
+
+        /* Yellow background for "Manage Orders" */
+        nav ul li a[href="orders.html"] {
+            background-color: #f39c12; /* Yellow background */
+            color: white;
+        }
+
+        nav ul li a[href="orders.html"]:hover {
+            background-color: #e67e22; /* Darker yellow on hover */
+        }
+
+        nav ul li a:hover {
+            color: white;
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #FFD700; /* Yellow color for footer text */
+        }
+
+        footer a {
+            color: #FFD700;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .btn-logout {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 24px;
+            background-color: #dc3545;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn-logout:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Dashboard</h2>
+
+        <nav>
+            <ul>
+                <li><a href="products.html">Manage Products</a></li>
+                <li><a href="orders.html">Manage Orders</a></li>
+                <!-- You can add more navigation links here -->
+            </ul>
+        </nav>
+
+        <a href="index.html" class="btn-logout">Logout</a>
+        
+        <footer>
+            <p>Powered by <a href="https://www.thenextgen.org" target="_blank">The Next Gen Solution</a></p>
+        </footer>
+    </div>
+</body>
+</html>

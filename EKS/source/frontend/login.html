@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Authentication</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #343a40;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            color: #00bcd4;
+        }
+
+        .container {
+            background-color: #495057;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #00bcd4;
+            margin-bottom: 30px;
+            font-size: 2em;
+            font-weight: 600;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+            font-size: 16px;
+            text-align: left;
+            width: 100%;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>User Authentication</h2>
+
+        <!-- Login Form -->
+        <div id="login-form">
+            <h3>Sign In</h3>
+            <form id="loginForm" method="POST">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <button type="submit">Login</button>
+            </form>
+            <div id="login-message"></div>
+            <button onclick="toggleForms()">Don't have an account? Sign Up</button>
+            <br>
+            <a href="#" onclick="forgotPassword()">Forgot Password?</a>
+            <p>Powered by <a href="https://www.thenextgen.solutions" target="_blank">The Next Gen Solution</a></p>
+        </div>
+
+        <!-- Signup Form -->
+        <div id="signup-form" class="hidden">
+            <h3>Sign Up</h3>
+            <form id="signupForm" method="POST" enctype="multipart/form-data">
+                <label for="new-username">Username:</label>
+                <input type="text" id="new-username" name="username" required onblur="checkUsernameAvailability()">
+                <span id="username-availability"></span>
+                <label for="first-name">First Name:</label>
+                <input type="text" id="first-name" name="firstName" required>
+                <label for="last-name">Last Name:</label>
+                <input type="text" id="last-name" name="lastName" required>
+                <label for="email">Email ID:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="mobile">Mobile No:</label>
+                <input type="tel" id="mobile" name="mobile" required>
+                <label for="new-password">Password:</label>
+                <input type="password" id="new-password" name="password" required>
+                <label for="profile-pic">Profile Picture:</label>
+                <input type="file" id="profile-pic" name="profilePic" accept="image/*">
+                <button type="submit">Sign Up</button>
+            </form>
+            <div id="signup-message"></div>
+            <button onclick="toggleForms()">Already have an account? Sign In</button>
+            <p>Powered by <a href="https://www.thenextgen.solutions" target="_blank">The Next Gen Solution</a></p>
+        </div>
+    </div>
+
+    <script>
+        function toggleForms() {
+            document.getElementById('login-form').classList.toggle('hidden');
+            document.getElementById('signup-form').classList.toggle('hidden');
+        }
+
+        async function checkUsernameAvailability() {
+            const username = document.getElementById('new-username').value;
+            if (username.length > 0) {
+                const response = await fetch(`/users/check-username?username=${username}`);
+                const result = await response.json();
+                document.getElementById('username-availability').innerText = result.available ? "Username available" : "Username taken";
+                document.getElementById('username-availability').style.color = result.available ? "green" : "red";
+            }
+        }
+
+        document.getElementById('signupForm').onsubmit = async function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const response = await fetch('users/signup', {
+                method: 'POST',
+                body: formData,
+            });
+            const result = await response.json();
+            document.getElementById('signup-message').innerText = result.message;
+        };
+
+        document.getElementById('loginForm').onsubmit = async function(event) {
+            event.preventDefault();
+            const formData = {
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value
+            };
+
+            const response = await fetch('users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const result = await response.json();
+            document.getElementById('login-message').innerText = result.message;
+
+            if (response.ok) {
+                window.location.href = 'dashboard.html';
+            }
+        };
+
+        function forgotPassword() {
+            alert("Redirecting to password recovery page...");
+        }
+    </script>
+</body>
+</html>

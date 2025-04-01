@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: order-service
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: order-service
@@ -14,7 +14,7 @@ spec:
      spec:
         containers:
         - name: order-service
-          image: mahadevanprotech/order-service
+          image: mahadevananandhan/order-service
           resources:
             requests:
               cpu: "250m"      # Minimum CPU request (5 millicores)
@@ -31,6 +31,7 @@ spec:
                 name: database-secret
 
 ---
+#Create Network load Balancer
 apiVersion: v1
 kind: Service
 metadata:

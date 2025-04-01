@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #2c3e50; /* Dark background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            color: #ecf0f1; /* Light text color */
+        }
+
+        .container {
+            background-color: #34495e; /* Dark container background */
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            width: 80%;
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #ecf0f1; /* Light color for title */
+            font-weight: 600;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px; /* Reduced padding for shorter buttons */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            width: 30%; /* Reduced button width */
+            transition: background-color 0.3s;
+        }
+
+        /* Adjusted Button Colors */
+        .add-product-btn {
+            background-color: #3498db; /* Blue button color */
+        }
+
+        .add-product-btn:hover {
+            background-color: #2980b9; /* Darker blue on hover */
+        }
+
+        .display-products-btn {
+            background-color: #1abc9c; /* Green button color */
+        }
+
+        .display-products-btn:hover {
+            background-color: #16a085; /* Darker green on hover */
+        }
+
+        .dashboard-btn {
+            background-color: #9b59b6; /* Purple button color */
+        }
+
+        .dashboard-btn:hover {
+            background-color: #8e44ad; /* Darker purple on hover */
+        }
+
+        .form-container, .product-table-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .form-container form {
+            background-color: #34495e; /* Dark form background */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: left;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-container label {
+            font-size: 1.1em;
+            color: #ecf0f1;
+            margin-top: 10px;
+            display: block;
+        }
+
+        .form-container input[type="text"], .form-container input[type="number"], .form-container button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            font-size: 1.1em;
+            border-radius: 5px;
+            border: 1px solid #95a5a6;
+        }
+
+        .form-container button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-container button:hover {
+            background-color: #218838;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #95a5a6;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #16a085; /* Dark green for header */
+            font-weight: 600;
+        }
+
+        td {
+            background-color: #34495e; /* Dark gray for data rows */
+        }
+
+        td button {
+            padding: 8px 16px;
+            background-color: #e74c3c; /* Red button for delete */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        td button:hover {
+            background-color: #c0392b; /* Darker red on hover */
+        }
+
+        /* Alternating Row Colors */
+        tr:nth-child(odd) td {
+            background-color: #2c3e50; /* Darker shade for odd rows */
+        }
+
+        tr:nth-child(even) td {
+            background-color: #34495e; /* Lighter shade for even rows */
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #bdc3c7;
+        }
+
+        footer a {
+            color: #1abc9c;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Product Management</h2>
+
+        <!-- Buttons to Show Form, Products or Navigate to Dashboard -->
+        <div class="btn-group">
+            <button class="add-product-btn" onclick="toggleForm('addProduct')">Add New Product</button>
+            <button class="display-products-btn" onclick="toggleForm('displayProducts')">Display Products</button>
+            <button class="dashboard-btn" onclick="window.location.href='dashboard.html'">Dashboard</button> <!-- Dashboard Button -->
+        </div>
+
+        <!-- Add New Product Form -->
+        <div class="form-container" id="addProductFormContainer">
+            <h3>Add New Product</h3>
+            <form id="addProductForm">
+                <label for="productName">Product Name:</label>
+                <input type="text" id="productName" required><br>
+
+                <label for="productPrice">Price:</label>
+                <input type="number" id="productPrice" required><br>
+
+                <label for="productQuantity">Quantity:</label>
+                <input type="number" id="productQuantity" required><br>
+
+                <button type="submit">Add Product</button>
+            </form>
+            <div id="addProductMessage" class="message"></div>
+        </div>
+
+        <!-- Products Table -->
+        <div class="product-table-container" id="productTableContainer">
+            <h3>Existing Products</h3>
+            <table id="productTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="productList"></tbody>
+            </table>
+        </div>
+
+        <footer>
+            <p>Powered by <a href="https://www.thenextgen.org" target="_blank">The Next Gen Solution</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // Toggle between Add New Product Form and Display Products
+        function toggleForm(formType) {
+            const addProductFormContainer = document.getElementById('addProductFormContainer');
+            const productTableContainer = document.getElementById('productTableContainer');
+
+            if (formType === 'addProduct') {
+                addProductFormContainer.style.display = 'block';
+                productTableContainer.style.display = 'none';
+            } else if (formType === 'displayProducts') {
+                addProductFormContainer.style.display = 'none';
+                productTableContainer.style.display = 'block';
+                loadProducts();  // Load products when Display Products is clicked
+            }
+        }
+
+        // Add Product Form Submission
+        document.getElementById('addProductForm').onsubmit = async function(event) {
+            event.preventDefault();
+            const formData = {
+                name: document.getElementById('productName').value,
+                price: document.getElementById('productPrice').value,
+                quantity: document.getElementById('productQuantity').value
+            };
+            const response = await fetch('/products/add_product', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
+            const result = await response.json();
+            document.getElementById('addProductMessage').innerText = result.message;
+            loadProducts();  // Refresh the product list after adding a product
+        };
+
+        // Load Products and Display in Table
+        async function loadProducts() {
+            const response = await fetch('/products/products');
+            const products = await response.json();
+            const productList = document.getElementById('productList');
+            productList.innerHTML = '';
+
+            products.forEach(product => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${product.name}</td>
+                    <td>${product.price}</td>
+                    <td>${product.quantity}</td>
+                    <td><button onclick="deleteProduct(${product.id})">Delete</button></td>
+                `;
+                productList.appendChild(row);
+            });
+        }
+
+        // Delete Product
+        async function deleteProduct(id) {
+            const response = await fetch(`/products/delete_product/${id}`, { method: 'DELETE' });
+            const result = await response.json();
+            alert(result.message);
+            loadProducts();  // Refresh the product list after deleting a product
+        }
+
+        // Load products on page load (optional, if you want the products to be shown initially)
+        window.onload = function() {
+            loadProducts();
+        };
+    </script>
+</body>
+</html>
