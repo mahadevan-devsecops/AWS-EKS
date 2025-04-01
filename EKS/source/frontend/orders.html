@@ -133,7 +133,7 @@
 
         async function fetchOrders() {
             try {
-                const response = await fetch(`${apiBaseUrl}/orders`);
+                const response = await fetch(`${apiBaseUrl}/get_orders`);
                 const orders = await response.json();
                 const orderList = document.getElementById('orderList');
                 orderList.innerHTML = '';

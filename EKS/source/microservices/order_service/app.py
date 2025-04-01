@@ -17,7 +17,7 @@ def get_db_connection():
     )
     return connection
 
-@app.route('/health', methods=['GET'])
+@app.route('orders/health', methods=['GET'])
 def health_check():
     """Check API and database health."""
     try:
@@ -32,7 +32,7 @@ def health_check():
     except Exception as e:
         return jsonify({"status": "unhealthy", "error": str(e)}), 500
 
-@app.route('/orders', methods=['GET'])
+@app.route('orders/list_orders', methods=['GET'])
 def get_orders():
     """Fetch all orders with product and user details."""
     try:
@@ -64,7 +64,7 @@ def get_orders():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/add_order', methods=['POST'])
+@app.route('orders/add_order', methods=['POST'])
 def add_order():
     """Place an order and deduct stock from the product table."""
     product_id = request.json.get('product_id')
@@ -108,7 +108,7 @@ def add_order():
         cursor.close()
         connection.close()
 
-@app.route('/delete_order/<int:order_id>', methods=['DELETE'])
+@app.route('orders/delete_order/<int:order_id>', methods=['DELETE'])
 def delete_order(order_id):
     """Delete an order."""
     try:
