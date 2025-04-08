@@ -7,7 +7,7 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/load-balancer-name: thenextgen-alb
-    alb.ingress.kubernetes.io/healthcheck-path: "/order/health"
+    alb.ingress.kubernetes.io/healthcheck-path: "/orders/health"
     alb.ingress.kubernetes.io/healthcheck-port: "80"
     alb.ingress.kubernetes.io/healthcheck-protocol: "HTTP"
     alb.ingress.kubernetes.io/actions.order-rewrite: >
@@ -18,17 +18,17 @@ spec:
     - host: thenextgen.solutions
       http:
         paths:
-          - path: /order/
+          - path: /orders/
             pathType: Prefix
             backend:
               service:
-                name: order-rewrite
+                name: order-service
                 port:
                   number: 80
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: order-service
+                name: frontend-service
                 port:
                   number: 80

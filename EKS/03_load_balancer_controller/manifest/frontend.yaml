@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: order-service
+  name: frontend-service
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      app: order-service
+      app: frontend-service
   template:
      metadata:
        labels:
-         app: order-service
+         app: frontend-service
      spec:
         containers:
-        - name: order-service
-          image: mahadevananandhan/order-service
+        - name: frontend-service
+          image: mahadevananandhan/frontend
           resources:
             requests:
               cpu: "250m"
@@ -28,10 +28,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: order-service
+  name: frontend-service
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-subnets: "subnet-01b15f37c2ffbc53f,subnet-032e6d8f3850f7516"
-    service.beta.kubernetes.io/aws-load-balancer-healthcheck-path: "/orders/health"
+    service.beta.kubernetes.io/aws-load-balancer-healthcheck-path: "/"
     service.beta.kubernetes.io/aws-load-balancer-healthcheck-port: "80"
     service.beta.kubernetes.io/aws-load-balancer-healthcheck-interval: "30"
     service.beta.kubernetes.io/aws-load-balancer-healthcheck-timeout: "5"
@@ -39,7 +39,7 @@ metadata:
     service.beta.kubernetes.io/aws-load-balancer-healthcheck-unhealthy-threshold: "2"
 spec:
   selector:
-    app: order-service
+    app: frontend-service
   ports:
     - protocol: TCP
       port: 80
