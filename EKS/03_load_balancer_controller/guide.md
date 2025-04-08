@@ -18,9 +18,9 @@
 2. Create IAM OIDC provider
     eksctl utils associate-iam-oidc-provider --region=us-east-1 --cluster=thenextgensolutions --approve
 
-2. Attach IAM Role to EKS, Retrive the policy arn from the above step.
+3. Attach IAM Role to EKS, Retrive the policy arn from the above step.
     eksctl create iamserviceaccount --cluster thenextgensolutions --namespace kube-system --name aws-load-balancer-controller --attach-policy-arn arn:aws:iam::888577041584:policy/AWSLoadBalancerControllerIAMPolicy --approve
-6. Add the following tag in the subnet, 
+4. Add the following tag in the subnet, 
     Retrive the VPC ID
     aws eks describe-cluster --name thenextgensolutions --region us-east-1 --query "cluster.resourcesVpcConfig.subnetIds"
 
@@ -32,7 +32,7 @@
     Add Tag to the subnets
     aws ec2 create-tags --resources subnet-032e6d8f3850f7516 subnet-01b15f37c2ffbc53f --tags Key=kubernetes.io/role/elb,Value=1
 
-4. Create Load Balancer
+5. Create Load Balancer
     kubectl apply -k "github.com/aws/eks-charts/stable/aws-load-balancer-controller/crds?ref=master"
     
     Install Helm 
