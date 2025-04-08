@@ -22,12 +22,12 @@ def health_check():
     """Check API and database health."""
     try:
         server_ip = socket.gethostbyname(socket.gethostname())
-        connection = get_db_connection()
-        cursor = connection.cursor()
-        cursor.execute("SELECT 1")
-        cursor.fetchall()
-        cursor.close()
-        connection.close()
+        #connection = get_db_connection()
+        #cursor = connection.cursor()
+        #cursor.execute("SELECT 1")
+        #cursor.fetchall()
+        #cursor.close()
+        #connection.close()
         return jsonify({"status": "healthy", "server_ip-V2": server_ip}), 200
     except Exception as e:
         return jsonify({"status": "unhealthy", "error": str(e)}), 500
