@@ -23,7 +23,7 @@ jobs:
         run: |
           ls -lrta
           pwd
-          cd ../../../frontend
+          cd EKS/source/frontend
           docker build . --file Dockerfile --tag 'mahadevananandhan/frontend'
       - name: Push Docker image to Docker Hub
         run: |
