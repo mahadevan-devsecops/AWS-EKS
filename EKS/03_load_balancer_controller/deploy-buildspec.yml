@@ -1,0 +1,11 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon EKS...
+      - aws eks update-kubeconfig --region us-east-1 --name thenextgensolutions
+  build:
+    commands:
+      - echo Applying latest deployment to EKS...
+      - kubectl rollout restart deployment/order-service
+      - echo Deployment updated successfully.
