@@ -21,7 +21,9 @@ jobs:
           docker push $IMAGE_NAME:latest
       - name: Change to EKS\source\frontend directory and build Docker image
         run: |
-          cd ../../frontend
+          ls -lrta
+          pwd
+          cd ../../../frontend
           docker build . --file Dockerfile --tag 'mahadevananandhan/frontend'
       - name: Push Docker image to Docker Hub
         run: |
